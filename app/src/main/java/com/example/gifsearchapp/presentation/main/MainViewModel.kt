@@ -1,4 +1,4 @@
-package com.example.gifsearchapp.ui.main
+package com.example.gifsearchapp.presentation.main
 
 import androidx.lifecycle.ViewModel
 
