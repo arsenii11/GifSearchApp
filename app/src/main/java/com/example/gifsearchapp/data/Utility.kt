@@ -1,4 +1,4 @@
-package com.example.gifsearchapp.utilities
+package com.example.gifsearchapp.data
 
 import android.app.Activity
 import android.content.Context
