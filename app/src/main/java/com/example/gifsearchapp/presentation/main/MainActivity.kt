@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Layout
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
@@ -35,17 +36,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        val rvGiphyList = findViewById<RecyclerView>(R.id.recyclerView)
-
         val gifs = mutableListOf<DataObject>()
-        giphyListAdapter = GiphyListAdapter(this, gifs)
 
-        rvGiphyList.adapter = giphyListAdapter
-        rvGiphyList.setHasFixedSize(true)
-        rvGiphyList.layoutManager = LinearLayoutManager(this)
-
-
-        //setupRecyclerView()
+        setupRecyclerView(gifs)
 
         val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -70,14 +63,20 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-   /* private fun setupRecyclerView() {
-        val rvGiphyList = binding.recyclerView
-        with(rvGiphyList) {
-            val gifs = mutableListOf<DataObject>()
-            giphyListAdapter = GiphyListAdapter(Context, gifs)
-        }
+   private fun setupRecyclerView(gifs:MutableList<DataObject>) {
+       val rvGiphyList = findViewById<RecyclerView>(R.id.recyclerView)
 
+       giphyListAdapter = GiphyListAdapter(this, gifs )
 
-    }*/
+        with(rvGiphyList){
+        adapter = giphyListAdapter
+        setHasFixedSize(true)
+        layoutManager = LinearLayoutManager(context)
+        recycledViewPool.setMaxRecycledViews(
+            GiphyListAdapter.VIEW_TYPE_ENABLED,
+            GiphyListAdapter.MAX_POOL_SIZE
+        )}
+
+    }
 
 }

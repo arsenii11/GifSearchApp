@@ -1,8 +1,10 @@
 package com.example.gifsearchapp.domain
 
+import androidx.lifecycle.LiveData
+
 interface GiphyListRepository {
 
-    fun getGiphyList():List<GiphyItem>
+    fun getGiphyList(): LiveData<List<GiphyItem>>
 
     fun addGiphyItem(giphyItem: GiphyItem)
 
