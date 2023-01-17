@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.Layout
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
@@ -34,6 +35,11 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel.giphyList.observe(this) {
+            giphyListAdapter.submitList(it)
+        }
 
 
         val gifs = mutableListOf<DataObject>()
