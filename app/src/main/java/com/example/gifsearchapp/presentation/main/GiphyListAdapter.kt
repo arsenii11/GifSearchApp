@@ -1,25 +1,35 @@
 package com.example.gifsearchapp.presentation.main
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.Glide
 import com.example.gifsearchapp.R
 import com.example.gifsearchapp.data.DataObject
+import com.example.gifsearchapp.domain.GiphyItem
 
-class GiphyListAdapter(val context: MainActivity, private val gifs:List<DataObject>): RecyclerView.Adapter<GiphyItemViewHolder>() {
+class GiphyListAdapter(val context: Context, private val gifs:List<DataObject>): ListAdapter<GiphyItem, GiphyItemViewHolder>(GiphyItemDiffCallback()) {
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GiphyItemViewHolder {
-        return  GiphyItemViewHolder(LayoutInflater.from(context).inflate(R.layout.item_giphy,parent,false))
+
+      val view = (LayoutInflater.from(parent.context).inflate(R.layout.item_giphy,parent,false))
+        return  GiphyItemViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: GiphyItemViewHolder, position: Int) {
+    override fun onBindViewHolder(viewHolder: GiphyItemViewHolder, position: Int) {
        val data = gifs[position]
 
         Glide.with(context).load(data.images.ogImage.url)
-            .into(holder.tvImage)
+            .into(viewHolder.tvImage)
     }
 
     override fun getItemCount(): Int {
         return gifs.size
+    }
+
+    companion object {
+        const val MAX_POOL_SIZE = 20
     }
 }

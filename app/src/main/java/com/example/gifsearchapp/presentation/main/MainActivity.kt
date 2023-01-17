@@ -4,8 +4,11 @@ package com.example.gifsearchapp.presentation.main
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Layout
 import android.util.Log
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.gifsearchapp.R
 import com.example.gifsearchapp.data.DataObject
 import com.example.gifsearchapp.data.DataResult
@@ -39,6 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         rvGiphyList.adapter = giphyListAdapter
         rvGiphyList.setHasFixedSize(true)
+        rvGiphyList.layoutManager = LinearLayoutManager(this)
 
 
         //setupRecyclerView()
@@ -57,6 +61,7 @@ class MainActivity : AppCompatActivity() {
 
                 //adding to list
                 gifs.addAll(body!!.res)
+                giphyListAdapter.notifyDataSetChanged()
             }
 
             override fun onFailure(call: Call<DataResult?>, t: Throwable) {
