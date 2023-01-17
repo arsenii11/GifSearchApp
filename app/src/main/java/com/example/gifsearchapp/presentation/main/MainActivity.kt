@@ -15,11 +15,11 @@ import com.example.gifsearchapp.R
 import com.example.gifsearchapp.data.DataObject
 import com.example.gifsearchapp.data.DataResult
 import com.example.gifsearchapp.data.DataService
+import com.example.gifsearchapp.data.Links.Companion.BASE_URL
 import com.example.gifsearchapp.databinding.ActivityMainBinding
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
-const val BASE_URL = "https://api.giphy.com/v1/"
 const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
