@@ -50,8 +50,6 @@ class MainActivity : AppCompatActivity() {
 
 
         val gifs = mutableListOf<DataObject>()
-        setupRecyclerView(gifs)
-       // retrofitRequest(gifs, "apple")
 
         if (!Utility.isNetworkAvailable(this)) showSnackbar("Internet unavailable")
         else {
@@ -82,10 +80,12 @@ class MainActivity : AppCompatActivity() {
                         timer = Timer()
                         timer.schedule(
                             object : TimerTask() {
+
                                 override fun run() {
-                                    //retrofitRequest(gifs,inputGiphy.toString())
                                     runOnUiThread {
+                                        gifs.clear()
                                         retrofitRequest(gifs, inputGiphy.text.toString())
+                                        setupRecyclerView(gifs)
                                         this.let { Utility.hideKeyboard(this@MainActivity) }
                                     }
                                 }
@@ -107,6 +107,7 @@ class MainActivity : AppCompatActivity() {
 
         val retroService = retrofit.create(DataService::class.java)
         retroService.getGifs(API_KEY, request).enqueue(object : Callback<DataResult?> {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<DataResult?>, response: Response<DataResult?>) {
                 val body = response.body()
                 if (body == null) {

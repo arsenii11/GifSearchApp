@@ -9,6 +9,15 @@
 
 
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="@string/giphy_search" />
+
     <EditText
         android:id="@+id/giphySearchInput"
         android:layout_width="match_parent"
@@ -27,6 +36,8 @@
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:focusable="true"/>
+
+
 
 
 </LinearLayout>

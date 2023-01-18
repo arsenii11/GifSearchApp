@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GifSearchApp</string>
+    <string name="giphy_search">Giphy search:</string>
 </resources>
