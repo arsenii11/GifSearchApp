@@ -8,17 +8,16 @@
     tools:context=".presentation.main.MainActivity">
 
 
-    <com.google.android.material.textfield.TextInputLayout
+
+    <EditText
+        android:id="@+id/giphySearchInput"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_margin="20px"
+        android:inputType="textPersonName"
+        android:hint="Input" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Input" />
-
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -28,5 +27,6 @@
         android:layout_marginBottom="16dp"
         android:clickable="true"
         android:focusable="true"/>
+
 
 </LinearLayout>

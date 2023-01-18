@@ -1,24 +1,31 @@
 package com.example.gifsearchapp.presentation.main
 
 
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
-import android.text.Layout
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.gifsearchapp.R
 import com.example.gifsearchapp.data.DataObject
 import com.example.gifsearchapp.data.DataResult
 import com.example.gifsearchapp.data.DataService
+import com.example.gifsearchapp.data.Links.Companion.API_KEY
 import com.example.gifsearchapp.data.Links.Companion.BASE_URL
+import com.example.gifsearchapp.data.Utility
 import com.example.gifsearchapp.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
+
 
 const val TAG = "MainActivity"
 
@@ -43,15 +50,63 @@ class MainActivity : AppCompatActivity() {
 
 
         val gifs = mutableListOf<DataObject>()
-
         setupRecyclerView(gifs)
+       // retrofitRequest(gifs, "apple")
+
+        if (!Utility.isNetworkAvailable(this)) showSnackbar("Internet unavailable")
+        else {
+
+            val inputGiphy = binding.giphySearchInput
+            inputGiphy.addTextChangedListener(
+                object : TextWatcher {
+                    override fun onTextChanged(
+                        s: CharSequence,
+                        start: Int,
+                        before: Int,
+                        count: Int
+                    ) {
+                    }
+
+                    override fun beforeTextChanged(
+                        s: CharSequence,
+                        start: Int,
+                        count: Int,
+                        after: Int
+                    ) {
+                    }
+
+                    private var timer: Timer = Timer()
+                    private val DELAY: Long = 500 // Milliseconds
+                    override fun afterTextChanged(s: Editable) {
+                        timer.cancel()
+                        timer = Timer()
+                        timer.schedule(
+                            object : TimerTask() {
+                                override fun run() {
+                                    //retrofitRequest(gifs,inputGiphy.toString())
+                                    runOnUiThread {
+                                        retrofitRequest(gifs, inputGiphy.text.toString())
+                                        this.let { Utility.hideKeyboard(this@MainActivity) }
+                                    }
+                                }
+                            },
+                            DELAY
+                        )
+                    }
+                }
+            )
+        }
+    }
+
+
+    private fun retrofitRequest(gifs: MutableList<DataObject>, request: String) {
 
         val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         val retroService = retrofit.create(DataService::class.java)
-        retroService.getGifs().enqueue(object : Callback<DataResult?> {
+        retroService.getGifs(API_KEY, request).enqueue(object : Callback<DataResult?> {
             override fun onResponse(call: Call<DataResult?>, response: Response<DataResult?>) {
                 val body = response.body()
                 if (body == null) {
@@ -64,25 +119,44 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<DataResult?>, t: Throwable) {
-                TODO("Not yet implemented")
+                showSnackbar("network failure ")
             }
         })
     }
 
-   private fun setupRecyclerView(gifs:MutableList<DataObject>) {
-       val rvGiphyList = findViewById<RecyclerView>(R.id.recyclerView)
+    //custom background for snackbar
+    private fun Snackbar.background(color: Int): Snackbar {
+        this.view.setBackgroundColor(color)
+        return this
+    }
 
-       giphyListAdapter = GiphyListAdapter(this, gifs )
+    @SuppressLint("UseRequireInsteadOfGet")
+    private fun showSnackbar(text: String) {
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG)
+            .setTextColor(ContextCompat.getColor(this, R.color.white))
+            .background(ContextCompat.getColor(this!!, R.color.red))
+            .show()
+    }
 
-        with(rvGiphyList){
-        adapter = giphyListAdapter
-        setHasFixedSize(true)
-        layoutManager = LinearLayoutManager(context)
-        recycledViewPool.setMaxRecycledViews(
-            GiphyListAdapter.VIEW_TYPE_ENABLED,
-            GiphyListAdapter.MAX_POOL_SIZE
-        )}
+    private fun setupRecyclerView(gifs: MutableList<DataObject>) {
+        val rvGiphyList = findViewById<RecyclerView>(R.id.recyclerView)
 
+        giphyListAdapter = GiphyListAdapter(this, gifs)
+
+        with(rvGiphyList) {
+            adapter = giphyListAdapter
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            recycledViewPool.setMaxRecycledViews(
+                GiphyListAdapter.VIEW_TYPE_ENABLED,
+                GiphyListAdapter.MAX_POOL_SIZE
+            )
+        }
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
 }
