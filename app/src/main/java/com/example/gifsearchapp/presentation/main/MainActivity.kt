@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
     private lateinit var giphyListAdapter: GiphyListAdapter
+    private val gifs = mutableListOf<DataObject>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,54 +50,44 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        val gifs = mutableListOf<DataObject>()
-
         if (!Utility.isNetworkAvailable(this)) showSnackbar("Internet unavailable")
-        else {
-
-            val inputGiphy = binding.giphySearchInput
-            inputGiphy.addTextChangedListener(
-                object : TextWatcher {
-                    override fun onTextChanged(
-                        s: CharSequence,
-                        start: Int,
-                        before: Int,
-                        count: Int
-                    ) {
-                    }
-
-                    override fun beforeTextChanged(
-                        s: CharSequence,
-                        start: Int,
-                        count: Int,
-                        after: Int
-                    ) {
-                    }
-
-                    private var timer: Timer = Timer()
-                    private val DELAY: Long = 500 // Milliseconds
-                    override fun afterTextChanged(s: Editable) {
-                        timer.cancel()
-                        timer = Timer()
-                        timer.schedule(
-                            object : TimerTask() {
-
-                                override fun run() {
-                                    runOnUiThread {
-                                        gifs.clear()
-                                        retrofitRequest(gifs, inputGiphy.text.toString())
-                                        setupRecyclerView(gifs)
-                                        this.let { Utility.hideKeyboard(this@MainActivity) }
-                                    }
-                                }
-                            },
-                            DELAY
-                        )
-                    }
-                }
-            )
+        else{
+            setupTextWatcher(binding, gifs)
         }
     }
+
+
+    fun setupTextWatcher(binding: ActivityMainBinding, gifs: MutableList<DataObject>) {
+        val inputGiphy = binding.giphySearchInput
+        inputGiphy.addTextChangedListener(
+            object : TextWatcher {
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+                private var timer = Timer()
+                private val DELAY = 500L
+
+                override fun afterTextChanged(s: Editable) {
+                    timer.cancel()
+                    timer = Timer()
+                    timer.schedule(
+                        object : TimerTask() {
+                            override fun run() {
+                                runOnUiThread {
+                                    gifs.clear()
+                                    retrofitRequest(gifs, inputGiphy.text.toString())
+                                    setupRecyclerView(gifs)
+                                    Utility.hideKeyboard(this@MainActivity)
+                                }
+                            }
+                        },
+                        DELAY
+                    )
+                }
+            }
+        )
+    }
+
 
 
     private fun retrofitRequest(gifs: MutableList<DataObject>, request: String) {
