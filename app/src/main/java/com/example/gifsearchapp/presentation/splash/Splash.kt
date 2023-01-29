@@ -1,9 +1,10 @@
-package com.example.gifsearchapp
+package com.example.gifsearchapp.presentation.splash
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
+import com.example.gifsearchapp.R
 import com.example.gifsearchapp.presentation.main.MainActivity
 
 class Splash : AppCompatActivity() {

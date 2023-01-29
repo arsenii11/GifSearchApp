@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
                 private var timer = Timer()
-                private val DELAY = 500L
+                private val DELAY: Long = 1500 // Milliseconds
 
                 override fun afterTextChanged(s: Editable) {
                     timer.cancel()
