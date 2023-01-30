@@ -2,24 +2,19 @@ package com.example.gifsearchapp.presentation.main
 
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gifsearchapp.R
-import com.example.gifsearchapp.data.DataObject
-import com.example.gifsearchapp.data.DataResult
-import com.example.gifsearchapp.data.DataService
+import com.example.gifsearchapp.data.*
 import com.example.gifsearchapp.data.Links.Companion.API_KEY
 import com.example.gifsearchapp.data.Links.Companion.BASE_URL
-import com.example.gifsearchapp.data.Utility
 import com.example.gifsearchapp.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.*
@@ -99,9 +94,9 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         val retroService = retrofit.create(DataService::class.java)
-        retroService.getGifs(API_KEY, request).enqueue(object : Callback<DataResult?> {
+        retroService.getGifs(API_KEY, request).enqueue(object : Callback<GifResponse?> {
             @SuppressLint("NotifyDataSetChanged")
-            override fun onResponse(call: Call<DataResult?>, response: Response<DataResult?>) {
+            override fun onResponse(call: Call<GifResponse?>, response: Response<GifResponse?>) {
                 val body = response.body()
                 if (body == null) {
                     Log.d(TAG, "onResponse: No response...")
@@ -112,7 +107,7 @@ class MainActivity : AppCompatActivity() {
                 giphyListAdapter.notifyDataSetChanged()
             }
 
-            override fun onFailure(call: Call<DataResult?>, t: Throwable) {
+            override fun onFailure(call: Call<GifResponse?>, t: Throwable) {
                 showSnackbar("network failure ")
             }
         })
