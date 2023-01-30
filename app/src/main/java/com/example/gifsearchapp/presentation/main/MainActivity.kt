@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    private fun retrofitRequest(gifs: MutableList<DataObject>, request: String) {
+    fun retrofitRequest(gifs: MutableList<DataObject>, request: String) {
 
         val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("UseRequireInsteadOfGet")
-    private fun showSnackbar(text: String) {
+    fun showSnackbar(text: String) {
         Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG)
             .setTextColor(ContextCompat.getColor(this, R.color.white))
             .background(ContextCompat.getColor(this!!, R.color.red))
