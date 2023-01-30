@@ -73,11 +73,13 @@ class MainActivity : AppCompatActivity() {
                     timer.schedule(
                         object : TimerTask() {
                             override fun run() {
+                                if(viewModel.validateInput(inputGiphy.text.toString()) ){
                                 runOnUiThread {
                                     gifs.clear()
                                     retrofitRequest(gifs, inputGiphy.text.toString())
                                     setupRecyclerView(gifs)
                                     Utility.hideKeyboard(this@MainActivity)
+                                }
                                 }
                             }
                         },
