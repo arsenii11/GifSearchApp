@@ -85,5 +85,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.mockito/mockito-core
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.8.0'
 
+    // Required -- JUnit 4 framework
+    testImplementation "junit:junit:4.13.2"
 
 }
