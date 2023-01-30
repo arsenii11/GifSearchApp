@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
                 private var timer = Timer()
-                private val DELAY = 500L
+                private val DELAY: Long = 1500 // Milliseconds
 
                 override fun afterTextChanged(s: Editable) {
                     timer.cancel()
@@ -73,11 +73,13 @@ class MainActivity : AppCompatActivity() {
                     timer.schedule(
                         object : TimerTask() {
                             override fun run() {
+                                if(viewModel.validateInput(inputGiphy.text.toString()) ){
                                 runOnUiThread {
                                     gifs.clear()
                                     retrofitRequest(gifs, inputGiphy.text.toString())
                                     setupRecyclerView(gifs)
                                     Utility.hideKeyboard(this@MainActivity)
+                                }
                                 }
                             }
                         },
@@ -90,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    private fun retrofitRequest(gifs: MutableList<DataObject>, request: String) {
+    fun retrofitRequest(gifs: MutableList<DataObject>, request: String) {
 
         val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -123,7 +125,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("UseRequireInsteadOfGet")
-    private fun showSnackbar(text: String) {
+    fun showSnackbar(text: String) {
         Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG)
             .setTextColor(ContextCompat.getColor(this, R.color.white))
             .background(ContextCompat.getColor(this!!, R.color.red))
