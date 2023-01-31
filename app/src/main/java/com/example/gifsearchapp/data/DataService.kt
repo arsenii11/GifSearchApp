@@ -18,7 +18,7 @@ interface DataService {
         @Query("api_key") access_key: String = API_KEY,
         @Query("q") f: String,
         @Query("lang") language: String = "en"
-    ):Call<GifResponse>
+    ):Call<DataResult>
 
     companion object {
 

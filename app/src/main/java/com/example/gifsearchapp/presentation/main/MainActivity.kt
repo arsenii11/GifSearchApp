@@ -69,12 +69,12 @@ class MainActivity : AppCompatActivity() {
                         object : TimerTask() {
                             override fun run() {
                                 if(viewModel.validateInput(inputGiphy.text.toString()) ){
-                                runOnUiThread {
-                                    gifs.clear()
-                                    retrofitRequest(gifs, inputGiphy.text.toString())
-                                    setupRecyclerView(gifs)
-                                    Utility.hideKeyboard(this@MainActivity)
-                                }
+                                    runOnUiThread {
+                                        gifs.clear()
+                                        retrofitRequest(gifs, inputGiphy.text.toString())
+                                        setupRecyclerView(gifs)
+                                        Utility.hideKeyboard(this@MainActivity)
+                                    }
                                 }
                             }
                         },
@@ -94,9 +94,9 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         val retroService = retrofit.create(DataService::class.java)
-        retroService.getGifs(API_KEY, request).enqueue(object : Callback<GifResponse?> {
+        retroService.getGifs(API_KEY, request).enqueue(object : Callback<DataResult?> {
             @SuppressLint("NotifyDataSetChanged")
-            override fun onResponse(call: Call<GifResponse?>, response: Response<GifResponse?>) {
+            override fun onResponse(call: Call<DataResult?>, response: Response<DataResult?>) {
                 val body = response.body()
                 if (body == null) {
                     Log.d(TAG, "onResponse: No response...")
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
                 giphyListAdapter.notifyDataSetChanged()
             }
 
-            override fun onFailure(call: Call<GifResponse?>, t: Throwable) {
+            override fun onFailure(call: Call<DataResult?>, t: Throwable) {
                 showSnackbar("network failure ")
             }
         })

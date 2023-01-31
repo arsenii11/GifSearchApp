@@ -3,7 +3,6 @@ package com.example.gifsearchapp.domain
 import androidx.paging.PagingSource
 import com.example.gifsearchapp.data.DataResult
 import com.example.gifsearchapp.data.DataService
-import com.example.gifsearchapp.data.GifResponse
 import retrofit2.Call
 
 class PagingSource(private val api: DataService):PagingSource<Int, GiphyItem>() {

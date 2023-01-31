@@ -27,7 +27,7 @@ class GiphyListAdapter(val context: Context,private val gifs:List<DataObject>): 
 
        val data = gifs[position]
 
-        Glide.with(context).load(data.images.ogImage.url)
+        Glide.with(context).load(data.images.dwImage.url)
             .into(viewHolder.tvImage)
     }
 
