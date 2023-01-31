@@ -9,14 +9,18 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gifsearchapp.R
 import com.example.gifsearchapp.data.*
 import com.example.gifsearchapp.data.Links.Companion.API_KEY
 import com.example.gifsearchapp.data.Links.Companion.BASE_URL
+import com.example.gifsearchapp.data.Utility.background
 import com.example.gifsearchapp.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
@@ -30,24 +34,34 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
     private lateinit var giphyListAdapter: GiphyListAdapter
+    private lateinit var mainViewModel:MainViewModel
     private val gifs = mutableListOf<DataObject>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        viewModel.giphyList.observe(this) {
-            giphyListAdapter.submitList(it)
-        }
-
-
+        setupViewModel()
         if (!Utility.isNetworkAvailable(this)) showSnackbar("Internet unavailable")
         else{
-            setupTextWatcher(binding, gifs)
+            setupRecyclerView(gifs)
+            setupView()
+            //setupTextWatcher(binding, gifs)
+        }
+    }
+
+    private fun setupViewModel() {
+        val factory = MainViewModelFactory(DataService())
+        mainViewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
+    }
+
+    private fun setupView() {
+        lifecycleScope.launch {
+            mainViewModel.giphies.collectLatest { giphiesData ->
+                GiphyListAdapter.submitData(giphiesData)
+            }
         }
     }
 
@@ -60,7 +74,7 @@ class MainActivity : AppCompatActivity() {
                 override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
                 private var timer = Timer()
-                private val DELAY: Long = 1500 // Milliseconds
+                private val DELAY: Long = 1000 // Milliseconds
 
                 override fun afterTextChanged(s: Editable) {
                     timer.cancel()
@@ -71,7 +85,7 @@ class MainActivity : AppCompatActivity() {
                                 if(viewModel.validateInput(inputGiphy.text.toString()) ){
                                 runOnUiThread {
                                     gifs.clear()
-                                    retrofitRequest(gifs, inputGiphy.text.toString())
+                                    //retrofitRequest(gifs, inputGiphy.text.toString())
                                     setupRecyclerView(gifs)
                                     Utility.hideKeyboard(this@MainActivity)
                                 }
@@ -87,7 +101,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    fun retrofitRequest(gifs: MutableList<DataObject>, request: String) {
+  /* fun retrofitRequest(gifs: MutableList<DataObject>, request: String) {
 
         val retrofit = Retrofit.Builder().baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -111,13 +125,8 @@ class MainActivity : AppCompatActivity() {
                 showSnackbar("network failure ")
             }
         })
-    }
+    }*/
 
-    //custom background for snackbar
-    private fun Snackbar.background(color: Int): Snackbar {
-        this.view.setBackgroundColor(color)
-        return this
-    }
 
     @SuppressLint("UseRequireInsteadOfGet")
     fun showSnackbar(text: String) {
@@ -142,10 +151,6 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
 }
