@@ -17,20 +17,9 @@ interface DataService {
     fun getGifs(
         @Query("api_key") access_key: String = API_KEY,
         @Query("q") f: String,
-        @Query("lang") language: String = "en"
-    ):Call<DataResult>
+        @Query("offset") page: Int,
+        @Query("lang") language: String = "en",
+        @Query("limit") size: Int = 10
+    ): Call<DataResult>
 
-    companion object {
-
-        operator fun invoke(): DataService = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(OkHttpClient.Builder().also { client ->
-                val logging = HttpLoggingInterceptor()
-                logging.setLevel(HttpLoggingInterceptor.Level.BODY)
-                client.addInterceptor(logging)
-            }.build())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(DataService::class.java)
-    }
 }

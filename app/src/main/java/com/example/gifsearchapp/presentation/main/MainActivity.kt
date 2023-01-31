@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
                                 if(viewModel.validateInput(inputGiphy.text.toString()) ){
                                     runOnUiThread {
                                         gifs.clear()
-                                        retrofitRequest(gifs, inputGiphy.text.toString())
+                                        retrofitRequest(gifs, inputGiphy.text.toString(),)
                                         setupRecyclerView(gifs)
                                         Utility.hideKeyboard(this@MainActivity)
                                     }
@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         val retroService = retrofit.create(DataService::class.java)
-        retroService.getGifs(API_KEY, request).enqueue(object : Callback<DataResult?> {
+        retroService.getGifs(API_KEY, request,0).enqueue(object : Callback<DataResult?> {
             @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(call: Call<DataResult?>, response: Response<DataResult?>) {
                 val body = response.body()
