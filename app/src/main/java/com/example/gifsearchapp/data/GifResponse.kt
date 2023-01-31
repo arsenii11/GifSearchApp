@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import retrofit2.Callback
 
 class GifResponse (
-    @SerializedName("data") val res: List<DataObject>,
-    val Pagination: List<InfoResponse>
+    @SerializedName("data") val res: List<GiphyItem>,
+    val Pagination: InfoResponse
     ) {
 }

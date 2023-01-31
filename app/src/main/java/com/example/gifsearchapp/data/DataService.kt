@@ -13,12 +13,12 @@ import retrofit2.http.Query
 
 
 interface DataService {
-    @GET("/v1/gifs/search?")
-    fun getGifs(
+    @GET("/v1/gifs/trending")
+    suspend fun getGifs(
         @Query("api_key") access_key: String = API_KEY,
-        @Query("q") f: String,
-        @Query("lang") language: String = "en"
-    ):Call<GifResponse>
+        @Query("offset") page: Int,
+        @Query("limit") size: Int = 10
+    ):GifResponse
 
     companion object {
 

@@ -5,6 +5,6 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gifsearchapp.R
 
-class GiphyItemViewHolder(val view: View):RecyclerView.ViewHolder(view) {
-    val tvImage = view.findViewById<ImageView>(R.id.image_giphy)
+class GiphyItemViewHolder(private val view: View):RecyclerView.ViewHolder(view) {
+    val giphyImage: ImageView = view.findViewById<ImageView>(R.id.image_giphy)
 }
