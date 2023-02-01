@@ -14,12 +14,28 @@ import retrofit2.http.Query
 
 interface DataService {
     @GET("/v1/gifs/search?")
-    fun getGifs(
+    suspend fun getPassengersData(
         @Query("api_key") access_key: String = API_KEY,
         @Query("q") f: String,
         @Query("offset") page: Int,
         @Query("lang") language: String = "en",
         @Query("limit") size: Int = 10
-    ): Call<DataResult>
 
+    ): GiphyResponse
+
+    companion object {
+
+        private const val BASE_URL ="https://api.giphy.com/v1/"
+
+        operator fun invoke(): DataService = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(OkHttpClient.Builder().also { client ->
+                val logging = HttpLoggingInterceptor()
+                logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+                client.addInterceptor(logging)
+            }.build())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(DataService::class.java)
+    }
 }

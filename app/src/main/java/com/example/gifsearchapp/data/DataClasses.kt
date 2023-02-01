@@ -2,8 +2,8 @@ package com.example.gifsearchapp.data
 
 import com.google.gson.annotations.SerializedName
 
-data class DataResult(
-    @SerializedName("data") val res: List<DataObject>,
+data class GiphyResponse(
+    @SerializedName("data") val data: List<GIFObject>,
     @SerializedName("pagination") val pagination: Pagination
 )
 
@@ -13,7 +13,8 @@ class Pagination(
     val count: Int
 )
 
-data class DataObject(
+data class GIFObject(
+    val id: String,
     @SerializedName("images") val images: DataImage
 )
 

@@ -1,6 +1,6 @@
 package com.example.gifsearchapp.domain
 
-data class GiphyItem(
+data class GIFObject(
     var id: Int = UNDEFINED_ID
 ) {
 

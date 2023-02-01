@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 
 interface GiphyListRepository {
 
-    fun getGiphyList(): LiveData<List<GiphyItem>>
+    fun getGiphyList(): LiveData<List<GIFObject>>
 
-    fun addGiphyItem(giphyItem: GiphyItem)
+    fun addGiphyItem(giphyItem: GIFObject)
 
-    fun getGiphyItem(giphyItemId:Int): GiphyItem
+    fun getGiphyItem(giphyItemId:Int): GIFObject
 }

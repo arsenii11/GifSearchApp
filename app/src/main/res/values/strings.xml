@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">GifSearchApp</string>
     <string name="giphy_search">Giphy search:</string>
+    <string name="tap_to_retry">Tap to retry</string>
 </resources>
