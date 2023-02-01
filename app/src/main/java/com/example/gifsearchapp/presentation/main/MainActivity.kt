@@ -73,8 +73,8 @@ class MainActivity : AppCompatActivity() {
                                         else {
                                             setupViewModel(inputGiphy.text.toString())
                                             Utility.hideKeyboard(this@MainActivity)
-                                            setupList()
                                             setupView()
+                                            setupList()
 
                                         }
                                     }
@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
     }
 
-    private fun setupList() {
+    private fun setupView() {
         giphyAdapter = GiphyListAdapter()
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
@@ -114,12 +114,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupView() {
-
-
+    private fun setupList() {
         lifecycleScope.launch {
             viewModel.giphyResponse.collectLatest { pagedData ->
-
                 giphyAdapter.submitData(pagedData)
             }
         }
