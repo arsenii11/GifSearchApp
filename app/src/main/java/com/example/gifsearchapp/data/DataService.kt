@@ -22,7 +22,4 @@ interface DataService {
         @Query("limit") size: Int = 10
     ): Call<DataResult>
 
-
-
-
 }
