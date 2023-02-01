@@ -12,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gifsearchapp.R
+import com.example.gifsearchapp.Utilities.Utility
+import com.example.gifsearchapp.Utilities.Utility.background
 import com.example.gifsearchapp.data.*
 import com.example.gifsearchapp.data.Links.Companion.API_KEY
 import com.example.gifsearchapp.data.Links.Companion.BASE_URL
@@ -113,11 +115,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    //custom background for snackbar
-    private fun Snackbar.background(color: Int): Snackbar {
-        this.view.setBackgroundColor(color)
-        return this
-    }
+
 
     @SuppressLint("UseRequireInsteadOfGet")
     fun showSnackbar(text: String) {
@@ -144,8 +142,5 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 
 }

@@ -1,4 +1,4 @@
-package com.example.gifsearchapp.data
+package com.example.gifsearchapp.Utilities
 
 import android.app.Activity
 import android.content.Context
@@ -7,6 +7,7 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 object Utility {
@@ -50,4 +51,11 @@ object Utility {
         }
         return false
     }
+
+    //custom background for snackbar
+    fun Snackbar.background(color: Int): Snackbar {
+        this.view.setBackgroundColor(color)
+        return this
+    }
+
 }

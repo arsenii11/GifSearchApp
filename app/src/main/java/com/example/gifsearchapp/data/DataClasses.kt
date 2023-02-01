@@ -3,10 +3,14 @@ package com.example.gifsearchapp.data
 import com.google.gson.annotations.SerializedName
 
 data class DataResult(
-    @SerializedName("data") val res: List<DataObject>
+    @SerializedName("data") val res: List<DataObject>,
+    @SerializedName("pagination") val pagination: Pagination
 )
-data class DataPagination(
-    @SerializedName("pagination") val page: List<InfoResponse>
+
+class Pagination(
+    val offset: Int,
+    val total_count: Int,
+    val count: Int
 )
 
 data class DataObject(
