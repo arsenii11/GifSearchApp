@@ -5,33 +5,27 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.gifsearchapp.R
 import com.example.gifsearchapp.Utilities.Utility
 import com.example.gifsearchapp.Utilities.Utility.background
 import com.example.gifsearchapp.data.*
-import com.example.gifsearchapp.data.Links.Companion.API_KEY
-import com.example.gifsearchapp.data.Links.Companion.BASE_URL
 import com.example.gifsearchapp.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import retrofit2.*
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
 
 const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
-
 
 
     private lateinit var viewModel: MainViewModel
@@ -45,19 +39,24 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        if (!Utility.isNetworkAvailable(this)) showSnackbar("Internet unavailable")
-        else {
-            setupTextWatcher(binding)
-        }
+
+        setupTextWatcher(binding)
+
     }
 
 
-    fun setupTextWatcher(binding: ActivityMainBinding,) {
+    fun setupTextWatcher(binding: ActivityMainBinding) {
         val inputGiphy = binding.giphySearchInput
         inputGiphy.addTextChangedListener(
             object : TextWatcher {
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+                override fun beforeTextChanged(
+                    s: CharSequence,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
 
                 private var timer = Timer()
                 private val DELAY: Long = 1500 // Milliseconds
@@ -68,12 +67,16 @@ class MainActivity : AppCompatActivity() {
                     timer.schedule(
                         object : TimerTask() {
                             override fun run() {
-                                if(validateInput(inputGiphy.text.toString()) ){
+                                if (validateInput(inputGiphy.text.toString())) {
                                     runOnUiThread {
-                                        setupViewModel(inputGiphy.text.toString())
-                                        Utility.hideKeyboard(this@MainActivity)
-                                        setupList()
-                                        setupView()
+                                        if (!Utility.isNetworkAvailable(this@MainActivity)) showSnackbar("Internet unavailable")
+                                        else {
+                                            setupViewModel(inputGiphy.text.toString())
+                                            Utility.hideKeyboard(this@MainActivity)
+                                            setupList()
+                                            setupView()
+
+                                        }
                                     }
                                 }
                             }
@@ -94,7 +97,7 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun setupViewModel(request_text:String) {
+    private fun setupViewModel(request_text: String) {
         val factory = MainViewModelFactory(DataService(), request_text)
         viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
     }
@@ -113,8 +116,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupView() {
 
+
         lifecycleScope.launch {
-            viewModel.passengers.collectLatest { pagedData ->
+            viewModel.giphyResponse.collectLatest { pagedData ->
+
                 giphyAdapter.submitData(pagedData)
             }
         }
