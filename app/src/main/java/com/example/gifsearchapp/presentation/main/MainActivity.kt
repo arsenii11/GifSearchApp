@@ -122,6 +122,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun emptyList(){
+        val clearGiphyAdapter = GiphyListAdapter()
+        clearGiphyAdapter.notifyDataSetChanged()
+    }
+
     fun validateInput(name: String): Boolean {
         var result = true
         if (name.isBlank()) {
