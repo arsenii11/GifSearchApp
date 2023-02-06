@@ -8,7 +8,7 @@ import com.example.gifsearchapp.data.GIFObject
 import com.example.gifsearchapp.databinding.ItemGiphyBinding
 
 
-class GiphyListAdapter : PagingDataAdapter<GIFObject, GiphyItemViewHolder>(PassengersComparator) {
+class GiphyListAdapter : PagingDataAdapter<GIFObject, GiphyItemViewHolder>(GiphyItemComparator) {
 
 
 
@@ -29,13 +29,4 @@ class GiphyListAdapter : PagingDataAdapter<GIFObject, GiphyItemViewHolder>(Passe
     }
 
 
-    object PassengersComparator : DiffUtil.ItemCallback<GIFObject>() {
-        override fun areItemsTheSame(oldItem: GIFObject, newItem: GIFObject): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: GIFObject, newItem: GIFObject): Boolean {
-            return oldItem == newItem
-        }
-    }
 }
