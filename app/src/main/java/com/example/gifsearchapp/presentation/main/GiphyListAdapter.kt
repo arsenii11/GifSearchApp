@@ -8,7 +8,7 @@ import com.example.gifsearchapp.data.GIFObject
 import com.example.gifsearchapp.databinding.ItemGiphyBinding
 
 
-class GiphyListAdapter : PagingDataAdapter<GIFObject, GiphyItemViewHolder>(GiphyItemComparator) {
+class GiphyListAdapter : PagingDataAdapter<GIFObject, GiphyItemViewHolder>(GiphyItemDiffCallback) {
 
 
 
