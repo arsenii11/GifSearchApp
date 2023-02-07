@@ -111,6 +111,10 @@ class MainActivity : AppCompatActivity() {
                 footer = GiphyLoadStateAdapter { giphyAdapter.retry() }
             )
             setHasFixedSize(true)
+            recycledViewPool.setMaxRecycledViews(
+                GiphyListAdapter.VIEW_TYPE_ENABLED,
+                GiphyListAdapter.MAX_POOL_SIZE
+            )
         }
     }
 
