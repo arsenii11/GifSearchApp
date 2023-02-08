@@ -128,6 +128,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun emptyList(){
         val clearGiphyAdapter = GiphyListAdapter()
+
+
         clearGiphyAdapter.notifyDataSetChanged()
     }
 

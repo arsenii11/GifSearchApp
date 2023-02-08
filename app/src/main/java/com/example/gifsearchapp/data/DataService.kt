@@ -25,8 +25,6 @@ interface DataService {
 
     companion object {
 
-        private const val BASE_URL ="https://api.giphy.com/v1/"
-
         operator fun invoke(): DataService = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(OkHttpClient.Builder().also { client ->

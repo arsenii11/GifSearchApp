@@ -1,4 +1,4 @@
-package com.example.gifsearchapp.domain
+package com.example.gifsearchapp.data
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingSource

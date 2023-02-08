@@ -6,7 +6,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.example.gifsearchapp.data.DataService
-import com.example.gifsearchapp.domain.PagingSource
+import com.example.gifsearchapp.data.PagingSource
 
 
 class MainViewModel(
